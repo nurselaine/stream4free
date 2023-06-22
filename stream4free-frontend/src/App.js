@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import io, { Socket } from "socket.io-client";
@@ -20,6 +20,12 @@ function App() {
       socket.emit("login", data);
     }
   };
+
+  useEffect(() => {
+    socket.on('recieveMessage', (data) => {
+      console.log(data);
+    })
+  }, [socket]);
 
   return (
     <div className="App">

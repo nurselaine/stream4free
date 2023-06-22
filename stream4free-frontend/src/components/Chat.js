@@ -17,14 +17,15 @@ function Chat({ socket, username, room }) {
           new Date(Date.now()).getMinutes(),
       };
 
-      await socket.emit("send_message", messageData);
+      await socket.emit("sendMessage", messageData);
+      console.log("user has joined message sent", messageData);
       setMessageList((list) => [...list, messageData]);
       setCurrentMessage("");
     }
   };
 
   useEffect(() => {
-    socket.on("receive_message", (data) => {
+    socket.on("recieveMessage", (data) => {
       setMessageList((list) => [...list, data]);
     });
   }, [socket]);
