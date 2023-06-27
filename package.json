@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@chakra-ui/react": "^2.6.1",
+    "@emotion/react": "^11.11.0",
+    "@emotion/styled": "^11.11.0",
+    "base-64": "^1.0.0",
+    "bcrypt": "^5.1.0",
+    "framer-motion": "^10.12.9",
+    "uuid": "^9.0.0"
+  }
+}

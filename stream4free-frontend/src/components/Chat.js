@@ -1,9 +1,27 @@
 import React, { useEffect, useState } from "react";
+import {
+  Box,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerContent,
+  DrawerCloseButton,
+  Flex,
+  Text,
+  useDisclosure,
+  Input,
+} from "@chakra-ui/react";
+import {SunIcon} from '@chakra-ui/icons';
+import styles from "../styles/chat.scss";
 // import ScrollToBottom from "react-scroll-to-bottom";
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -24,6 +42,18 @@ function Chat({ socket, username, room }) {
     }
   };
 
+  const messageBox = (messageContent) => (
+    <Box>
+      <Flex>
+        <SunIcon />
+        <Flex>
+          <Text>{messageContent.message}</Text>
+          <Text>{messageContent.author}</Text>
+        </Flex>
+      </Flex>
+    </Box>
+  )
+
   useEffect(() => {
     socket.on("recieveMessage", (data) => {
       setMessageList((list) => [...list, data]);
@@ -35,15 +65,58 @@ function Chat({ socket, username, room }) {
       <div className="chat-header">
         <p>Live Chat</p>
       </div>
+      <div>
+        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+          Open
+        </Button>
+        <Drawer
+          isOpen={isOpen}
+          onClose={onClose}
+          finalFocusRef={btnRef}
+          isFullHeight={true}
+          size="md"
+        >
+          <DrawerContent>
+            <DrawerHeader>Stream4Free Live Chat</DrawerHeader>
+            <DrawerBody>
+              <Input
+                type="text"
+                value={currentMessage}
+                placeholder="Hey..."
+                onChange={(event) => {
+                  setCurrentMessage(event.target.value);
+                }}
+                  onKeyPress={(event) => {
+                  event.key === "Enter" && sendMessage();
+                }}
+              />
+            </DrawerBody>
+            <DrawerFooter>
+              <Button onClick={onClose}>Close</Button>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
       <div className="chat-body">
         {/* <ScrollToBottom className="message-container"> */}
-          {messageList.map((messageContent) => {
-            return (
-              <div
-                className="message"
-                id={username === messageContent.author ? "you" : "other"}
-              >
-                <div>
+        {messageList.map((messageContent) => {
+          return (
+            <div
+              className="message"
+              id={username === messageContent.author ? "you" : "other"}
+            >
+              <Flex>
+                <Flex direction={"column"}>
+                  <Box sx={"boder: 1px solid black"}>
+                    <Text className="message-content">
+                      {messageContent.author}
+                    </Text>
+                    <Text id="author">{messageContent.message}</Text>
+                    <Text id="time">{messageContent.time}</Text>
+                  </Box>
+                </Flex>
+              </Flex>
+              {/* <div>
                   <div className="message-content">
                     <p>{messageContent.message}</p>
                   </div>
@@ -51,10 +124,10 @@ function Chat({ socket, username, room }) {
                     <p id="time">{messageContent.time}</p>
                     <p id="author">{messageContent.author}</p>
                   </div>
-                </div>
-              </div>
-            );
-          })}
+                </div> */}
+            </div>
+          );
+        })}
         {/* </ScrollToBottom> */}
       </div>
       <div className="chat-footer">
@@ -82,15 +155,15 @@ export default Chat;
 // export default function Chat({ socket, username, room }) {
 //   const [currentMessage, setCurrentMessage] = useState("");
 //   const [chat, setChat] = useState([]);
-  
+
 //   const sendMessage = async () => {
 //     if(currentMessage !== ""){
 //       const messageObj = {
 //         room: room,
-//         author: username, 
+//         author: username,
 //         message: currentMessage,
-//         time: new Date(Date.now()).getHours() + 
-//         ":" + 
+//         time: new Date(Date.now()).getHours() +
+//         ":" +
 //         new Date(Date.now()).getMinutes(), // get current date and get hours
 //       }
 
@@ -125,8 +198,8 @@ export default Chat;
 
 //       </div>
 //       <div className="chat-footer">
-//         <input 
-//           type="text" 
+//         <input
+//           type="text"
 //           placeholder="start typing here..."
 //           onChange={(e) => setCurrentMessage(e.target.value)}
 //         />
