@@ -5,6 +5,7 @@ import {
   Drawer,
   DrawerBody,
   DrawerFooter,
+  DrawerOverlay,
   DrawerHeader,
   DrawerContent,
   DrawerCloseButton,
@@ -13,7 +14,7 @@ import {
   useDisclosure,
   Input,
 } from "@chakra-ui/react";
-import {SunIcon} from '@chakra-ui/icons';
+import { SunIcon } from "@chakra-ui/icons";
 import styles from "../styles/chat.scss";
 // import ScrollToBottom from "react-scroll-to-bottom";
 
@@ -52,7 +53,7 @@ function Chat({ socket, username, room }) {
         </Flex>
       </Flex>
     </Box>
-  )
+  );
 
   useEffect(() => {
     socket.on("recieveMessage", (data) => {
@@ -65,16 +66,84 @@ function Chat({ socket, username, room }) {
       <div className="chat-header">
         <p>Live Chat</p>
       </div>
-      <div>
-        <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-          Open
-        </Button>
-        <Drawer
+      <div></div>
+      <div className="chat-body">
+        {messageList.map((messageContent) => {
+          return (
+            <div
+              className="message"
+              id={username === messageContent.author ? "you" : "other"}
+            >
+              <Flex>
+                <Flex direction={"column"}>
+                  <Box sx={"boder: 1px solid black"}>
+                    <Text className="message-content">
+                      {messageContent.author}
+                    </Text>
+                    <Text id="author">{messageContent.message}</Text>
+                    <Text id="time">{messageContent.time}</Text>
+                  </Box>
+                </Flex>
+              </Flex>
+            </div>
+          );
+        })}
+        <div style={{width: '20vw'}}>
+          <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
+            Open
+          </Button>
+          <Drawer
+            id="drawer-111"
+            sx={{ width: "20vw" }}
+            w="20vw"
+            onClose={onClose}
+            isOpen={isOpen}
+            size={"md"}
+            placement="left"
+          >
+            {/* <DrawerOverlay  w='20vw' /> */}
+            <DrawerContent id="drawer-content" sx={"width: 20vw"}>
+              <DrawerCloseButton  w='20vw' />
+              <DrawerHeader w='20vw'>{`sm drawer contents`}</DrawerHeader>
+              <DrawerBody  w='20vw'>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Consequat nisl vel pretium lectus quam id. Semper quis lectus
+                  nulla at volutpat diam ut venenatis. Dolor morbi non arcu
+                  risus quis varius quam quisque. Massa ultricies mi quis
+                  hendrerit dolor magna eget est lorem. Erat imperdiet sed
+                  euismod nisi porta. Lectus vestibulum mattis ullamcorper
+                  velit.
+                </p>
+              </DrawerBody>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      </div>
+      <div className="chat-footer">
+        <input
+          type="text"
+          value={currentMessage}
+          placeholder="Hey..."
+          onChange={(event) => {
+            setCurrentMessage(event.target.value);
+          }}
+          onKeyPress={(event) => {
+            event.key === "Enter" && sendMessage();
+          }}
+        />
+        <button onClick={sendMessage}>&#9658;</button>
+      </div>
+
+      {/* chat drawer
+      <Drawer
           isOpen={isOpen}
           onClose={onClose}
           finalFocusRef={btnRef}
           isFullHeight={true}
           size="md"
+          placement="right"
         >
           <DrawerContent>
             <DrawerHeader>Stream4Free Live Chat</DrawerHeader>
@@ -95,55 +164,7 @@ function Chat({ socket, username, room }) {
               <Button onClick={onClose}>Close</Button>
             </DrawerFooter>
           </DrawerContent>
-        </Drawer>
-      </div>
-      <div className="chat-body">
-        {/* <ScrollToBottom className="message-container"> */}
-        {messageList.map((messageContent) => {
-          return (
-            <div
-              className="message"
-              id={username === messageContent.author ? "you" : "other"}
-            >
-              <Flex>
-                <Flex direction={"column"}>
-                  <Box sx={"boder: 1px solid black"}>
-                    <Text className="message-content">
-                      {messageContent.author}
-                    </Text>
-                    <Text id="author">{messageContent.message}</Text>
-                    <Text id="time">{messageContent.time}</Text>
-                  </Box>
-                </Flex>
-              </Flex>
-              {/* <div>
-                  <div className="message-content">
-                    <p>{messageContent.message}</p>
-                  </div>
-                  <div className="message-meta">
-                    <p id="time">{messageContent.time}</p>
-                    <p id="author">{messageContent.author}</p>
-                  </div>
-                </div> */}
-            </div>
-          );
-        })}
-        {/* </ScrollToBottom> */}
-      </div>
-      <div className="chat-footer">
-        <input
-          type="text"
-          value={currentMessage}
-          placeholder="Hey..."
-          onChange={(event) => {
-            setCurrentMessage(event.target.value);
-          }}
-          onKeyPress={(event) => {
-            event.key === "Enter" && sendMessage();
-          }}
-        />
-        <button onClick={sendMessage}>&#9658;</button>
-      </div>
+        </Drawer> */}
     </div>
   );
 }
