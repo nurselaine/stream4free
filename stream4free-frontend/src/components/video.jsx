@@ -50,7 +50,7 @@ export default function Video() {
         }}>stop</button>
       </div>
       <video
-        style={{ width: 800, height: 800 }}
+        style={{ width: 400, height: 400, margin: 'auto' }}
         ref={videoRef}
         autoPlay
         controls

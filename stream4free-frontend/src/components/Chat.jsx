@@ -1,28 +1,33 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerOverlay,
-  DrawerHeader,
-  DrawerContent,
-  DrawerCloseButton,
   Flex,
-  Text,
+  Avatar,
+  Link,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
   useDisclosure,
-  Input,
-} from "@chakra-ui/react";
-import { SunIcon } from "@chakra-ui/icons";
+  useColorModeValue,
+  Stack,
+  useColorMode,
+  Center,
+  Text,
+} from '@chakra-ui/react';
+import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import styles from "../styles/chat.scss";
 // import ScrollToBottom from "react-scroll-to-bottom";
 
 function Chat({ socket, username, room }) {
   const [currentMessage, setCurrentMessage] = useState("");
   const [messageList, setMessageList] = useState([]);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const btnRef = React.useRef();
+  const { colorMode, toggleColorMode } = useColorMode();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const sendMessage = async () => {
     if (currentMessage !== "") {
@@ -89,36 +94,6 @@ function Chat({ socket, username, room }) {
           );
         })}
         <div style={{width: '20vw'}}>
-          <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-            Open
-          </Button>
-          <Drawer
-            id="drawer-111"
-            sx={{ width: "20vw" }}
-            w="20vw"
-            onClose={onClose}
-            isOpen={isOpen}
-            size={"md"}
-            placement="left"
-          >
-            {/* <DrawerOverlay  w='20vw' /> */}
-            <DrawerContent id="drawer-content" sx={"width: 20vw"}>
-              <DrawerCloseButton  w='20vw' />
-              <DrawerHeader w='20vw'>{`sm drawer contents`}</DrawerHeader>
-              <DrawerBody  w='20vw'>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
-                  do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                  Consequat nisl vel pretium lectus quam id. Semper quis lectus
-                  nulla at volutpat diam ut venenatis. Dolor morbi non arcu
-                  risus quis varius quam quisque. Massa ultricies mi quis
-                  hendrerit dolor magna eget est lorem. Erat imperdiet sed
-                  euismod nisi porta. Lectus vestibulum mattis ullamcorper
-                  velit.
-                </p>
-              </DrawerBody>
-            </DrawerContent>
-          </Drawer>
         </div>
       </div>
       <div className="chat-footer">
@@ -135,36 +110,6 @@ function Chat({ socket, username, room }) {
         />
         <button onClick={sendMessage}>&#9658;</button>
       </div>
-
-      {/* chat drawer
-      <Drawer
-          isOpen={isOpen}
-          onClose={onClose}
-          finalFocusRef={btnRef}
-          isFullHeight={true}
-          size="md"
-          placement="right"
-        >
-          <DrawerContent>
-            <DrawerHeader>Stream4Free Live Chat</DrawerHeader>
-            <DrawerBody>
-              <Input
-                type="text"
-                value={currentMessage}
-                placeholder="Hey..."
-                onChange={(event) => {
-                  setCurrentMessage(event.target.value);
-                }}
-                  onKeyPress={(event) => {
-                  event.key === "Enter" && sendMessage();
-                }}
-              />
-            </DrawerBody>
-            <DrawerFooter>
-              <Button onClick={onClose}>Close</Button>
-            </DrawerFooter>
-          </DrawerContent>
-        </Drawer> */}
     </div>
   );
 }

@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css?family=Kanit:900');
+
+$PRIMARY_TEXT: #E47068;
+$SECONDARY_TEXT: #DB0000;
+$TERTIARY_TEXT: #000;
+$QUATERNARY_TEXT: #831010;
+
+#login_header {
+  color: $PRIMARY_TEXT;
+  font-family: "Kanit";
+  text-transform: uppercase;
+  // font-size: 60px;
+  line-height: 1em;
+  text-shadow: 1px 1px 1px $SECONDARY_TEXT,
+  1px 2px 1px $SECONDARY_TEXT,
+  1px 4px 1px $SECONDARY_TEXT,
+  1px 5px 6px $TERTIARY_TEXT
+}
